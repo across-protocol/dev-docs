@@ -22,6 +22,7 @@
 * [Selected Contract Functions](developers/selected-contract-functions.md)
 * [Running a Relayer](developers/running-a-relayer.md)
 * [Integrating Across into your application](developers/integrating-across-into-your-application.md)
+* [Composable Bridging](developers/composable-bridging.md)
 * [Developer notes](developers/developer-notes.md)
 
 ## ADDITIONAL INFO
