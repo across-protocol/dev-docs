@@ -1,5 +1,5 @@
 ---
-description: Using Across to build a Bridge-and-Swap smart contract
+description: Use Across to bridge + execute a transaction
 ---
 
 # Composable Bridging
@@ -7,6 +7,8 @@ description: Using Across to build a Bridge-and-Swap smart contract
 ## **What is Composable Bridging:?**
 
 You can instruct Across to execute a transaction upon filling your deposit on the destination chain. This transaction would be executed atomically with the fill transaction.
+
+**NOTE: The transaction that gets executed on the destination chain must be non-reverting otherwise user deposits may risk getting locked.**
 
 ## How does it work?&#x20;
 
@@ -16,8 +18,8 @@ When a relayer fills your deposit by calling `fillRelay()` on the destination Sp
 
 ## Requirements&#x20;
 
-* The deposit `message` is not empty&#x20;
-* The `recipient` address is a contract on the destinationChainId that implements a public `handleAcrossMessage(address,uint256,bool,address,bytes)` function&#x20;
+* The deposit `message` is not empty
+* The `recipient` address is a contract on the destinationChainId that implements a public `handleAcrossMessage(address,uint256,bool,address,bytes)` function, and this function must be non-reverting&#x20;
 * The additional gas cost to execute the above function is compensated for in the deposit's [`relayerFeePct`](../how-across-works/overview/fee-model.md#relayer-fees)
 
 ## Detailed instructions
@@ -26,49 +28,6 @@ When a relayer fills your deposit by calling `fillRelay()` on the destination Sp
 * Use the Across API to get an estimate of the `relayerFeePct` you should set for your message and recipient combination&#x20;
 * Call `deposit()` passing in your message&#x20;
 * Once the relayer calls `fillRelay()` on the destination, your recipient's `handleAcrossMessage` will be executed
-
-## Example: Implementing a Bridge and Swap on Optimism&#x20;
-
-* Let’s say we want to call `swap(address inputToken, address outputToken, uint256 inputAmount, uint256 minOutputAmount)` on a DEX on Optimism.&#x20;
-* We will be bridging 1,000 USDC from Polygon to Optimism for at least 0.1 WETH.&#x20;
-* Let’s implement a contract that handles the swap for us and deploy it on Optimism:&#x20;
-
-```solidity
-contract MySwapper { 
-    address owner;
-    DEXInterface dex = 0xSomeDexAddress; 
-    address tokenToReceiveFromSwap = 0xWETHon-optimism-address;
-    function handleAcrossMessage(
-        address tokenSent, 
-        uint256 amount, 
-        bool fillCompleted, 
-        address, // relayer unused 
-        bytes memory message
-    ) external { 
-        require(fillCompleted,"cannot swap until full fill amount is received"); 
-        (address outputToken, uint256 minOutAmount) = abi.decode(message, (address,uint256)); 
-        uint256 amountOut = dex.swap(tokenSent, outputToken, amount, minOutAmount);
-        IERC20(outputToken).transfer(owner, amountOut);
-    } 
-}
-```
-
-* Compute the `message` we'll pass into `SpokePool.deposit()` on Polygon along with the 1,000 USDC
-
-
-
-```typescript
-const swapMessage: string = ethers.abi.ABICoder.encode(["address","uint256"], [
-"0xWETH-on-optimism", // address outputToken e.g. WETH
-"100000000000000000" // uint256 minAmountOut e.g. 0.1e18 WETH
-]);
-```
-
-* Call Across-API’s [/suggested-fees](across-api.md#suggested-fees) endpoint with params `?token=0xUSDC-on-polygon-address&destinationChainId=10&amount= 1000000000&originChainId=137&recipient=MySwapper.address&message=swapMessage`&#x20;
-* This returns a `relayerFeePct` we should set when calling deposit with message=swapMessage, recipient=MySwapper.address , etc.&#x20;
-* Once the deposit is filled by a relayer on Optimism, `MySwapper.handleAcrossMessage` will be executed within the fill transaction
-
-
 
 ## Example: Implementing a Bridge and Unwrap
 
