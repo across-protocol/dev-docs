@@ -9,7 +9,7 @@ These requirements are subject to change as the EVM and Layer 2 ecosystem evolve
 The below are non-negotiable and are a pre-requisite to any consideration.
 
 * EVM chain with a canonical token and message bridge to mainnet
-* 30D MA TVL of chain > $50M
+* 30D MA TVL of chain > $75M
 * ≥ 2 independent RPC node providers
 * Dedicated support channel containing technical members of the new chain with priority support commitment to advise on contract development and debug data quality and/or disagreements between RPC providers
 
