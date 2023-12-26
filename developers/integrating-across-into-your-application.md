@@ -8,7 +8,7 @@ description: >-
 
 Across was designed as a platform on which third party projects enabling cross chain asset transfer could be built. We are very excited to build together and we've put together this guide which _should_ contain everything you need to integrate with Across.&#x20;
 
-If you have further questions or suggestions for this guide, please send a message to the #developer-questions channel in the [Across Discord](broken-reference).
+If you have further questions or suggestions for this guide, please send a message to the #developer-questions channel in the [Across Discord](https://discord.across.to).
 
 ## How to initiate a deposit
 
