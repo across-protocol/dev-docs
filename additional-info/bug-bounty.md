@@ -2,10 +2,6 @@
 
 Security of the platform is our highest priority. All smart contracts and off-chain code (i.e. most of the code within the `across-protocol` [repository](https://github.com/across-protocol)) are within scope and are publicly verifiable. Security researchers are eligible for a bug bounty for reporting undiscovered vulnerabilities.
 
-Audits
-
-The audit for the Across Protocol can be found [here](https://blog.openzeppelin.com/uma-across-v2-audit/).
-
 ### Bounty Program <a href="#reporting" id="reporting"></a>
 
 We encourage the community to audit our open source code; we also encourage the responsible disclosure of any issues. The bug bounty program is intended to recognize the value of working with the community of independent security researchers and sets out our definition of good faith in the context of finding and reporting vulnerabilities, as well as what you can expect from us in return.
@@ -16,12 +12,12 @@ To be eligible a bounty, a bug must have not been previously known by the Across
 
 The amount of compensation will vary depending on bug severity. Reward amounts typically correspond to severity in the following manner. The reward currency can be discussed on a case by case basis.
 
-| Severity |               Reward |
-| -------- | -------------------: |
-| Low      |                 $250 |
-| Medium   |               $1,000 |
-| High     |              $10,000 |
-| Critical | 10% of funds at risk |
+| Severity |           Reward |
+| -------- | ---------------: |
+| Low      |             $250 |
+| Medium   |           $1,000 |
+| High     |          $10,000 |
+| Critical | up to $1,000,000 |
 
 Severity is calculated according to the [OWASP](https://owasp.org/www-project-risk-assessment-framework/) risk rating model based on Impact and Likelihood.
 
