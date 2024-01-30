@@ -52,18 +52,19 @@ chmod 0400 .env
 
 ### Updating
 
-```
-# A helper script is available to automate updates. Ths performs
-# the following actions:
-# - Flushes existing dependency installations.
-# - Pulls in the latest relayer-v2 commit.
-# - Installs all dependencies and builds the relayer.
-# - Displays the latest commit in the relayer-v2 repository.
-yarn update
+A helper script is available to automate updates. This performs the following actions:
 
-# Important: This update helper is offered as a convenience. After
-# update, the operator must manually verify that the update suceeded
-# and that the commit shown matches the intended target.
+* Flushes any existing installed dependencies.
+* Pulls down the latest relayer-v2 commit.
+* Installs all dependencies and builds the relayer.
+* Displays the latest commit in the relayer-v2 repository.
+
+#### Important
+
+This update helper is offered as a convenience. After update, the operator must manually verify that the update succeeded and that the commit shown matches the intended target.
+
+```sh
+yarn update
 ```
 
 ### Configuration
