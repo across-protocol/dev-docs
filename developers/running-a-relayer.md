@@ -24,7 +24,19 @@ The Across v2 Relay Bot is implemented in Node.js and is capable of running on a
 
 # Establish environment file and restrict filesystem permissions.
 touch .env
-chmod 0640 .env
+chmod 0600 .env
+
+# The private key or seed phrase for the relayer can be stored in a
+# dedicated file. Operators should be especially careful to set the file
+# permissions correctly and to backup any secrets securely. The path to
+# the secret is set via the SECRET env var (optionally specified in
+# .env). The file may be stored anywhere in the file system but must be
+# readable by the user that runs the relayer.
+touch .secret
+chown &#x3C;user>:&#x3C;group> .secret
+chmod 0600 .secret
+echo &#x3C;private-key-or-mnemonic> > .secret
+chmod 0400 .secret
 
 # Install dependencies and build relayer.
 # Nodejs and yarn are required.
@@ -35,7 +47,7 @@ yarn build
 yarn test
 
 # Apply any necessary changes to .env and mark it read-only.
-chmod 0600 .env
+chmod 0400 .env
 </code></pre>
 
 ### Updating
@@ -65,16 +77,22 @@ Operators can exclude tokens/destination chains by not having a balance for that
 ```shell
 # Do change the following configs:
 
-# Amount of time to wait (in seconds) between bot loops. This
-# can be set to 0 to run once and exit, which is useful for
-# test, or when operating as a cronjob such as with Google Cloud's
-# Cloud Scheduler.
+# Amount of time to wait (in seconds) between bot loops. This can be
+# set to 0 to run once and exit (recommended). Operators can schedule
+# relayer externally (i.e. via cron or another job scheduler).
+#
 # If set to a non-zero value such as 10, the bot will run through all
-# instructions, sleep for 10 seconds, then run again.
-POLLING_DELAY=30
+# instructions, sleep for 10 seconds, then run again. This mode is not
+# recommended.
+POLLING_DELAY=0
 
-# Wallet details
-MNEMONIC="your twelve or twenty four word seed phrase ..."
+# SECRET identifies a separate file containing a private key or mnemonic
+# to be used by the relayer. The file must contain only the raw key or
+# mnemonic. Critical: Ensure that the filesystem permissions for this
+# file are properly configured (i.e. owned by one specific user, not
+# world-readable, ...).
+# SECRET=<path-to-private-key-or-mnemonic>
+SECRET=.secret
 
 # Define RPC providers for each chain. One RPC provider is specified
 # per line. Format:
