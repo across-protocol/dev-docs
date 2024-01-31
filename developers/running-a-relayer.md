@@ -391,10 +391,15 @@ The gckms interface is tailored for use by Risk Labs and is not currently intend
 
 ### Running the Relayer for the first time
 
-Once you've installed and built the relayer code and set your desired environment variables, you're all set to run the relayer code. The entry point to run the code is the command:
+Once you've installed and built the relayer code and set your desired environment variables, you're all set to run the relayer code. The entry point to run the code is the command (choose one of the following):
 
 ```shell
-SEND_RELAYS=false yarn relay --wallet mnemonic
+# Run the relayer, deriving private key from the SECRET env var (default)
+SEND_RELAYS=false yarn relay
+
+# Run the relayer, overriding the private key source.
+# Sub in the desired key source (secret, mnemonic, privateKey, gckms).
+SEND_RELAYS=false yarn relay --wallet <secret|mnemonic|privateKey|gckms>
 ```
 
 This will run the relayer in "simulation mode" meaning that it will simulate the transactions that would fill deposits, but will not submit them. This will give you a chance to review transactions before funds are sent.&#x20;
