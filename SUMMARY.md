@@ -24,6 +24,7 @@
 * [Integrating Across into your application](developers/integrating-across-into-your-application.md)
 * [Composable Bridging](developers/composable-bridging.md)
 * [Developer notes](developers/developer-notes.md)
+* [Migration from V2 to V3](developers/migration-from-v2-to-v3.md)
 
 ## ADDITIONAL INFO
 
