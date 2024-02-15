@@ -2,7 +2,7 @@
 description: >-
   Information for users of the Across API and the smart contracts (e.g. those
   who call the Across SpokePools directly to deposit or fill bridge transfers
-  and those who track SpokePool events)
+  and those who track SpokePool events).
 ---
 
 # Migration from V2 to V3
@@ -386,4 +386,60 @@ struct V3SlowFill {
     uint256 updatedOutputAmount;
 }
 
+```
+
+## Important changes for dApp Developers
+
+The `deposit` interface will not change. The function will however emit a new event `V3FundsDeposited` as outlined in [#across-v3-events](migration-from-v2-to-v3.md#across-v3-events "mention"). The `fillDeadline` will be set to `MAX_UINT`, meaning that the deposit will never expire and be refunded to the origin chain. The `outputToken` will be set to 0x0 to signal to depositors that the "equivalent" output token should be replaced at fill time. The exclusivityDeadline and exclusiveRelayer will be set to 0 and 0x0 respectively suggesting that there is no exclusivity period. Finally, the `outputAmount` will be equal to  `inputAmount * (1 - relayerFeePct)`.
+
+```solidity
+function depositV3(
+    address depositor,
+    address recipient,
+    address inputToken,
+    address outputToken,
+    uint256 inputAmount,
+    uint256 outputAmount,
+    uint256 destinationChainId,
+    address exclusiveRelayer,
+    uint32 quoteTimestamp,
+    uint32 fillDeadline,
+    uint32 exclusivityDeadline,
+    bytes calldata message
+) external payable;
+
+// Old function:
+function deposit(
+    address recipient,
+    address originToken,
+    uint256 amount,
+    uint256 destinationChainId,
+    int64 relayerFeePct,
+    uint32 quoteTimestamp,
+    bytes memory message,
+    uint256 maxCount
+) external payable;
+```
+
+To speed up a deposit, a new function will need to be used. Previously this was named `speedUpDeposit` and the new function to speed up a V3FundsDeposited event will be `speedUpV3Deposit.`
+
+```solidity
+function speedUpV3Deposit(
+    address depositor,
+    uint32 depositId,
+    uint256 updatedOutputAmount,
+    address updatedRecipient,
+    bytes calldata updatedMessage,
+    bytes calldata depositorSignature
+) external;
+
+// Old function:
+function speedUpDeposit(
+    address depositor,
+    int64 updatedRelayerFeePct,
+    uint32 depositId,
+    address updatedRecipient,
+    bytes memory updatedMessage,
+    bytes memory depositorSignature
+) external;
 ```
