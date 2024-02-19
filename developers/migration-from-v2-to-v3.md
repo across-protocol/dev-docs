@@ -199,6 +199,8 @@ function handleV3AcrossMessage(
 * handleAcrossMessage() -> handleV3AcrossMessage
 * Function parameter \`bool fillCompleted\` has been removed.
 
+**For a smooth transition to Across v3, integrators are recommended to implement concurrent support for handleAcrossMessage() and handleV3AcrossMessage(). handleAcrossMessage() can be removed at a later date.**
+
 The motivation for updating the function prototype is that partial fills are no longer possible in Across v3, so messaging recipients no longer require special logic to account for them.
 
 ### Events
