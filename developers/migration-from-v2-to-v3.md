@@ -177,11 +177,35 @@ type FeesResponse = {
 }
 ```
 
-## Changes to Across Smart Contract Events
+## Changes to Across Smart Contracts
+
+### Breaking Change: Across+ (Composable Bridging)&#x20;
+
+**All users of Across+ (Composable Bridging) are required to upgrade their messaging implementations to use handleV3AcrossMessage().**
+
+Across v3 updates the callback interface for receiving messages in a recipient contract. The new function prototype is as follows:
+
+```
+function handleV3AcrossMessage(
+    address tokenSent,
+    uint256 amount,
+    address relayer,
+    bytes memory message
+) external;
+```
+
+&#x20;The key differences to Across v2 are:
+
+* handleAcrossMessage() -> handleV3AcrossMessage
+* Function parameter \`bool fillCompleted\` has been removed.
+
+The motivation for updating the function prototype is that partial fills are no longer possible in Across v3, so messaging recipients no longer require special logic to account for them.
+
+### Events
 
 If you depend on querying SpokePool events to track the status of bridge transfers, then this section is designed to support you.
 
-### Across V2 Events
+#### Across V2 Events
 
 In Across V2, a bridge consists of a `FundsDeposited` event on the origin chain and a `FilledRelay` event on the destination chain. They must match on all common parameters and the `FilledRelay#realizedLpFeePct` must be equal to the LP fee at the `FundsDeposited#quoteTimestamp` based on the [computation rules described in the UMIP](https://github.com/UMAprotocol/UMIPs/blob/399180965bf3caf44637d2e530bbaf542fd15f46/UMIPs/umip-157.md#validating-realizedlpfeepct). Moreover, the `FilledRelay#destinationToken` also needs to match the `FundsDeposited#originToken` based on the [matching rules described in the UMIP.](https://github.com/UMAprotocol/UMIPs/blob/399180965bf3caf44637d2e530bbaf542fd15f46/UMIPs/umip-157.md#matching-l2-tokens-and-l1-tokens)
 
@@ -226,7 +250,7 @@ struct RelayExecutionInfo {
 }
 ```
 
-### Across V3 Events
+#### Across V3 Events
 
 Across V3 bridge transfers consist of a `V3FundsDeposited` event emitted on the origin chain and a `FilledV3Relay` event emitted on the destination chain.
 
