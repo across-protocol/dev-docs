@@ -28,7 +28,6 @@
 
 ## ADDITIONAL INFO
 
-* [New Chain Requests](additional-info/new-chain-requests.md)
 * [Support Links](additional-info/support-links.md)
 * [Bug Bounty](additional-info/bug-bounty.md)
 * [Audits](additional-info/audits.md)
